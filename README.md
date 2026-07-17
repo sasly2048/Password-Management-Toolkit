@@ -94,16 +94,6 @@ These are documented deliberately as an active learning/portfolio project — se
 
 ---
 
-## Roadmap
-
-- [ ] Replace `rand()` with a CSPRNG-backed generator
-- [ ] Add robust `scanf` return-value checking and input sanitization
-- [ ] Add a menu loop for multiple operations per session
-- [ ] Add unit tests for `Strength_Check` scoring logic
-- [ ] Add optional password masking on Linux/Windows terminals
-
----
-
 ## Repository Structure
 
 ```
