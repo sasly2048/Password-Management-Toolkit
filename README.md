@@ -20,6 +20,12 @@
 
 </div>
 
+<div align="center">
+
+  [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/sasly204800)
+
+</div>
+
 ---
 
 ## Features
