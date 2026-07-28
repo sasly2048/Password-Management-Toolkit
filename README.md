@@ -10,6 +10,16 @@
   command-line interface.
 </p>
 
+<div align="center">
+
+![Last Commit](https://img.shields.io/github/last-commit/sasly2048/Password-Management-Toolkit)
+![Language](https://img.shields.io/badge/Language-C-A8B9CC?logo=c&logoColor=white)
+![License](https://img.shields.io/github/license/sasly2048/Password-Management-Toolkit)
+![Made with Love](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D4)
+
+</div>
+
 ---
 
 ## Features
