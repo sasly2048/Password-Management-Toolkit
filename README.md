@@ -1,7 +1,7 @@
 <h1 align="center">Password Management Toolkit</h1>
 
 <p align="center">
-  <strong>A lightweight C toolkit for password analysis and secure password generation.</strong>
+  <strong>A modular password generation and password strength analysis toolkit written in C.</strong>
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 
 <div align="center">
 
-  [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/sasly204800)
+[![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/sasly204800)
 
 </div>
 
@@ -30,51 +30,59 @@
 
 ## Features
 
-- **Password Strength Checker** — scores a user-supplied password against five security criteria and returns a strength classification with targeted improvement suggestions.
+- **Password Strength Checker** — analyzes password length, character diversity, and repeated-character patterns to produce a strength classification and improvement suggestions.
 - **Random Password Generator** — generates a password of a user-specified length guaranteed to include at least one uppercase letter, one lowercase letter, one digit, and one special character, then evaluates it with the same strength checker.
 
 ---
 
 ## Password Strength Criteria
 
-| Criteria | Description | Points |
-|---|---|---|
-| Length ≥ 8 characters | Ensures a baseline resistance to brute-force attacks | +1 |
-| Contains uppercase letters (A–Z) | Improves character-set complexity | +1 |
-| Contains lowercase letters (a–z) | Improves character-set diversity | +1 |
-| Contains digits (0–9) | Adds numerical entropy | +1 |
-| Contains special characters (`!@#$...`) | Adds unpredictability | +1 |
+| Criteria                     | Description                                         |
+| ---------------------------- | --------------------------------------------------- |
+| Password length              | Rewards longer passwords                            |
+| Uppercase letters (A–Z)      | Improves character-set diversity                    |
+| Lowercase letters (a–z)      | Improves character-set diversity                    |
+| Digits (0–9)                 | Adds numerical complexity                           |
+| Special characters           | Increases password complexity                       |
+| Repeated-character detection | Penalizes repetitive patterns that weaken passwords |
 
 **Score Classification**
 
 | Score | Classification |
-|---|---|
-| 0 – 1 | 🔴 Very Weak |
-| 2 | 🟠 Weak |
-| 3 | 🟡 Moderate |
-| 4 | 🟢 Strong |
-| 5 | 🟣 Very Strong |
+| ----- | -------------- |
+| 0     | 🔴 Very Weak   |
+| 1     | 🟠 Weak        |
+| 2     | 🟡 Fair        |
+| 3     | 🟢 Moderate    |
+| 4     | 🔵 Strong      |
+| 5     | 🟣 Very Strong |
+| 6     | ⭐ Excellent   |
 
 ---
 
-##  Build & Run
+## Build & Run
 
-**Local (gcc/clang — Linux, macOS, WSL, or Windows via MinGW/clang):**
+### GCC
+
 ```bash
-gcc code.c -o password_toolkit
-./password_toolkit
+gcc main.c password_generator.c strength_checker.c secure_random.c utils.c -o password_toolkit
 ```
 
-**Windows (MSVC):**
-```powershell
-cl code.c /Fe:password_toolkit.exe
-.\password_toolkit.exe
+### MSVC
+
+```bat
+cl main.c password_generator.c strength_checker.c secure_random.c utils.c bcrypt.lib
 ```
+
+On Windows, the project uses **BCryptGenRandom()** for cryptographically
+secure random number generation.
 
 **Test online (GitHub Codespaces):**
 [Open in Codespaces](https://github.com/codespaces/psychic-space-parakeet-4j664xp54gv9cjxq5?editor=web)
+
 ```bash
-gcc code.c -o code && ./code
+gcc main.c password_generator.c strength_checker.c secure_random.c utils.c -o password_toolkit
+./password_toolkit
 ```
 
 ---
@@ -99,22 +107,70 @@ All conditions satisfied!
 
 ---
 
+## Why are there `.h` files?
+
+C projects are typically split into:
+
+- **Header files (`.h`)** -- Declare functions, constants, types, and
+  macros so other source files know what is available.
+- **Source files (`.c`)** -- Contain the actual implementation.
+
+For example:
+
+```c
+// password_generator.h
+void generate_password(char *out, int length);
+```
+
+```c
+// password_generator.c
+void generate_password(char *out, int length)
+{
+    /* implementation */
+}
+```
+
+`main.c` includes the header:
+
+```c
+#include "password_generator.h"
+```
+
+allowing it to call `generate_password()` without knowing how it is
+implemented.
+
 ## Known Limitations
 
-- **Not cryptographically secure.** The generator uses the C standard library `rand()`, seeded with `srand(time(NULL))`. This is a pseudo-random number generator (PRNG) that is predictable and unsuitable for producing real security credentials — do not use generated passwords for actual accounts. A production version should use a CSPRNG (e.g. `/dev/urandom` on Linux, `BCryptGenRandom` on Windows, or `arc4random_buf` where available).
-- **No input validation on numeric input.** `scanf("%d", &length)` does not check for a failed read; non-numeric input results in undefined behavior.
+- Platform-dependent randomness. Windows builds use BCryptGenRandom() for cryptographically secure random number generation. The current non-Windows implementation is a development fallback and should be replaced with a platform-native CSPRNG such as getrandom() or arc4random_buf() for production use.
+- Limited input handling. Basic numeric validation is implemented, but additional validation and error recovery could further improve robustness.
 - **Single-pass menu.** The program performs one operation and exits rather than looping back to the menu.
 - **Plaintext terminal echo.** Passwords entered for strength-checking are not masked during input.
 
-These are documented deliberately as an active learning/portfolio project — see Roadmap below for planned fixes.
+These are documented deliberately as an active learning/portfolio project.
 
 ---
 
 ## Repository Structure
 
-```
-Password_Management_Toolkit/
-├── code.c        # Core program: strength checker + password generator
+```text
+Password-Management-Toolkit/
+│
+├── main.c                  # Program entry point and menu
+│
+├── constants.h             # Shared constants and configuration
+│
+├── password_generator.c    # Password generation logic
+├── password_generator.h    # Password generator interface
+│
+├── strength_checker.c      # Password strength analysis
+├── strength_checker.h      # Strength checker interface
+│
+├── secure_random.c         # Cryptographically secure random number generation
+├── secure_random.h         # Secure RNG interface
+│
+├── utils.c                 # Common helper functions
+├── utils.h                 # Utility function declarations
+│
 └── README.md
 ```
 
