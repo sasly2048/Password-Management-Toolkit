@@ -141,10 +141,10 @@ implemented.
 
 ## Known Limitations
 
-- Platform-dependent randomness. Windows builds use BCryptGenRandom() for cryptographically secure random number generation. The current non-Windows implementation is a development fallback and should be replaced with a platform-native CSPRNG such as getrandom() or arc4random_buf() for production use.
-- Limited input handling. Basic numeric validation is implemented, but additional validation and error recovery could further improve robustness.
-- **Single-pass menu.** The program performs one operation and exits rather than looping back to the menu.
-- **Plaintext terminal echo.** Passwords entered for strength-checking are not masked during input.
+- **Platform-dependent randomness :** Windows builds use BCryptGenRandom() for cryptographically secure random number generation. The current non-Windows implementation is a development fallback and should be replaced with a platform-native CSPRNG such as getrandom() or arc4random_buf() for production use.
+- **Limited input handling :** Basic numeric validation is implemented, but additional validation and error recovery could further improve robustness.
+- **Single-pass menu :** The program performs one operation and exits rather than looping back to the menu.
+- **Plaintext terminal echo :** Passwords entered for strength-checking are not masked during input.
 
 These are documented deliberately as an active learning/portfolio project.
 
