@@ -1,0 +1,5 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+#define MIN_PASSWORD_LENGTH 8
+#define MAX_PASSWORD_LENGTH 128
+#endif
